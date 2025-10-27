@@ -3,6 +3,8 @@
 //Words will be separated by spaces. 
 //There can be punctuation in a word, we will only add/keep punctuation at the end of a string if it is at the end of a string.
 //    for examples: Hello.==> Ellohay.    Good-bye! ==> Ood-byegay!    so... ==> osay...
+//maybe make a variable containing strings of all vowels then use indexOf method to check if first letter is a vowel then translate
+//for translate feature maybe use replace feature
 
 public class Book
 {
@@ -23,7 +25,7 @@ public class Book
 
     return convertedWord;
   }
-
+  
   public String translateSentence(String sentence)
   {
     String retSentence = "";
