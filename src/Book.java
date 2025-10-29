@@ -1,36 +1,79 @@
-//A few assumptions.......
+public class Book {
 
-//Words will be separated by spaces. 
-//There can be punctuation in a word, we will only add/keep punctuation at the end of a string if it is at the end of a string.
-//    for examples: Hello.==> Ellohay.    Good-bye! ==> Ood-byegay!    so... ==> osay...
-//maybe make a variable containing strings of all vowels then use indexOf method to check if first letter is a vowel then translate
-//for translate feature maybe use replace feature
+    public String pigLatin(String word) {
+        return translateWord(word);
+    }
 
-public class Book
-{
-  public String pigLatin(String word)
-  {
+ 
+    public int endPunctuation(String word) {
+        for (int i = word.length() - 1; i >= 0; i--) {
+            char c = word.charAt(i);
+            if (Character.isLetterOrDigit(c)) {
+                if (i == word.length() - 1) return -1; 
+                return i + 1;
+            }
+        }
+        return 0; 
+    }
 
-  }
-  
-  public int endPunctuation(String word)  //return the index of where the punctuation is at the end of a String. If it is all punctuation return 0, if there is no punctuation return -1
-  {
+    // Translates a single word into Pig Latin
+    public String translateWord(String word) {
+        if (word.length() == 0) return word;
 
-    return -1;
-  }
+        // Separate punctuation
+        int punctIndex = endPunctuation(word);
+        String coreWord = (punctIndex == -1) ? word : word.substring(0, punctIndex);
+        String punctuation = (punctIndex == -1) ? "" : word.substring(punctIndex);
 
-  public String translateWord(String word)    //to share with class
-  {
-    String convertedWord = "";
+        boolean isCapitalized = Character.isUpperCase(coreWord.charAt(0));
+        String lowerWord = coreWord.toLowerCase();
 
-    return convertedWord;
-  }
-  
-  public String translateSentence(String sentence)
-  {
-    String retSentence = "";
+        String vowels = "aeiou";
+        String convertedWord = "";
 
+        if (vowels.indexOf(lowerWord.charAt(0)) != -1) {
+            convertedWord = lowerWord + "yay";
+        } else {
+            int vowelPos = -1;
+            for (int i = 0; i < lowerWord.length(); i++) {
+                if (vowels.indexOf(lowerWord.charAt(i)) != -1) {
+                    vowelPos = i;
+                    break;
+                }
+            }
+            if (vowelPos == -1) {
+                convertedWord = lowerWord + "ay"; 
+            } else {
+                convertedWord = lowerWord.substring(vowelPos) + lowerWord.substring(0, vowelPos) + "ay";
+            }
+        }
 
-    return retSentence;
-  }
-}  
+        if (isCapitalized) {
+            convertedWord = convertedWord.substring(0, 1).toUpperCase() + convertedWord.substring(1);
+        }
+
+        convertedWord += punctuation;
+
+        return convertedWord;
+    }
+
+    public String translateSentence(String sentence) {
+        String[] words = sentence.split(" ");
+        StringBuilder result = new StringBuilder();
+
+        for (int i = 0; i < words.length; i++) {
+            result.append(translateWord(words[i]));
+            if (i < words.length - 1) result.append(" ");
+        }
+
+        return result.toString();
+    }
+
+    // Quick test
+    public static void main(String[] args) {
+        Book b = new Book();
+        System.out.println(b.translateSentence("hello!"));      
+        System.out.println(b.translateSentence("What?!?"));     
+        System.out.println(b.translateSentence("Allons-y"));   
+    }
+}
